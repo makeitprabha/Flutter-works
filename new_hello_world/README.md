@@ -1,6 +1,6 @@
-# new_hello_world
+# Basic hello world program
 
-A new Flutter project.
+Snackbar with custom toast message library
 
 ## Getting Started
 
