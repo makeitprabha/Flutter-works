@@ -5,6 +5,14 @@ class PageStateInformation with ChangeNotifier {
   int _currentPage = 0;
   String _title = "ToDo";
   bool isListClicked = false;
+  bool isSetiingsActivate = false;
+
+  bool get getIsSettingsActivate => isSetiingsActivate;
+
+  set setIsSettingsActivate(bool clicked) {
+    isSetiingsActivate = clicked;
+    notifyListeners();
+  }
 
   bool get getIsListClicked => isListClicked;
 

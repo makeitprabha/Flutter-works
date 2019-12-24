@@ -1,9 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final darkTheme = ThemeData.dark();
+final darkTheme = ThemeData(
+  appBarTheme: AppBarTheme(
+    color: Colors.grey[850],
+    iconTheme: IconThemeData(
+      color: Colors.white,
+    ),
+    textTheme: TextTheme(
+      title: TextStyle(
+          color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+    ),
+  ),
+  brightness: Brightness.dark,
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    elevation: 3.0,
+    backgroundColor: Colors.grey,
+  ),
+  textTheme: TextTheme(
+    body1: TextStyle(color: Colors.white),
+    body2: TextStyle(color: Colors.white),
+    button: TextStyle(color: Colors.white),
+  ),
+);
 
-final lightTheme = ThemeData.light();
+final lightTheme = ThemeData(
+  appBarTheme: AppBarTheme(
+    color: Colors.blue[900],
+    iconTheme: IconThemeData(
+      color: Colors.white,
+    ),
+    textTheme: TextTheme(
+      title: TextStyle(
+          color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+    ),
+  ),
+);
 
 class ThemeChanger extends ChangeNotifier {
   final String themeKey = "theme";

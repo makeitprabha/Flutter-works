@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_todo/core/models/cell_view.dart';
 import 'package:my_todo/core/models/screen_route.dart';
 import 'package:my_todo/core/viewmodels/CRUDModel.dart';
+import 'package:my_todo/core/viewmodels/theme.dart';
 import 'package:my_todo/ui/views/home_page.dart';
 import 'package:my_todo/ui/widgets/list_view.dart';
 import 'package:my_todo/ui/widgets/text.dart';
@@ -78,6 +79,7 @@ class _ProductCardState extends State<ProductCard> {
 
   Future<void> getCollectionTypeCount(BuildContext context) async {
     final productProvider = Provider.of<CRUDModel>(context);
+    final _theme = Provider.of<ThemeChanger>(context);
     CollectionReference userReference =
         productProvider.getCollectionReference();
     QuerySnapshot eventsQuery;
@@ -88,13 +90,21 @@ class _ProductCardState extends State<ProductCard> {
         .getDocuments();
 
     if (eventsQuery.documents.length > 0) {
-      groupListItems.add(
-        HeadingItem(
-            this.widget.todoDetails,
-            CellView.myTodoIconsBlack[this.widget.position],
-            eventsQuery.documents.length,
-            CellView.myTodoTileColor[this.widget.position]),
-      );
+      _theme.darkTheme
+          ? groupListItems.add(
+              HeadingItem(
+                  this.widget.todoDetails,
+                  CellView.myTodoIcons[this.widget.position],
+                  eventsQuery.documents.length,
+                  CellView.myTodoTileColor[this.widget.position]),
+            )
+          : groupListItems.add(
+              HeadingItem(
+                  this.widget.todoDetails,
+                  CellView.myTodoIconsBlack[this.widget.position],
+                  eventsQuery.documents.length,
+                  CellView.myTodoTileColor[this.widget.position]),
+            );
       eventsQuery.documents.map(
         (DocumentSnapshot values) {
           groupListItems.add(MessageItem(

@@ -8,7 +8,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

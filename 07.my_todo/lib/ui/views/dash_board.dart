@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_todo/core/models/cell_view.dart';
 import 'package:my_todo/core/viewmodels/page_state_information.dart';
+import 'package:my_todo/core/viewmodels/theme.dart';
 import 'package:my_todo/ui/widgets/error_view.dart';
 import 'package:my_todo/ui/widgets/grid_view.dart';
 import 'package:my_todo/ui/widgets/list_view.dart';
@@ -17,10 +18,11 @@ class DashBoard extends StatefulWidget {
 class _DashBoardState extends State<DashBoard> {
   int _setDocumentCount = -1;
   Future<CollectionReference> future;
-  Future<int> futureInt;
+  Future<void> futureInt;
   Future<void> futurevoid;
   final List<int> tasksCountArry = new List<int>();
   final List<ListItem> groupListItems = new List<ListItem>();
+  var _theme;
 
   @override
   void initState() {
@@ -33,10 +35,11 @@ class _DashBoardState extends State<DashBoard> {
   @override
   Widget build(BuildContext context) {
     var _pageState = Provider.of<PageStateInformation>(context);
+    _theme = Provider.of<ThemeChanger>(context);
     if (_setDocumentCount > 0) {
       return Scaffold(
         body: RefreshIndicator(
-          onRefresh: refreshToken,
+          onRefresh: getCollectionTypeCount,
           child: OrientationBuilder(
             builder: (context, orientation) {
               return FutureBuilder(
@@ -124,7 +127,7 @@ class _DashBoardState extends State<DashBoard> {
     }
   }
 
-  Future<int> getCollectionTypeCount() async {
+  Future<void> getCollectionTypeCount() async {
     CollectionReference userReference =
         Firestore.instance.collection('todos').reference();
     QuerySnapshot eventsQuery;
@@ -135,10 +138,18 @@ class _DashBoardState extends State<DashBoard> {
           .where("Type", isEqualTo: CellView.myTodoTypes[i])
           .getDocuments();
       if (eventsQuery.documents.length > 0) {
-        groupListItems.add(
-          HeadingItem(CellView.myTodoTypes[i], CellView.myTodoIconsBlack[i],
-              eventsQuery.documents.length, CellView.myTodoTileColor[i]),
-        );
+        _theme.darkTheme
+            ? groupListItems.add(
+                HeadingItem(CellView.myTodoTypes[i], CellView.myTodoIcons[i],
+                    eventsQuery.documents.length, CellView.myTodoTileColor[i]),
+              )
+            : groupListItems.add(
+                HeadingItem(
+                    CellView.myTodoTypes[i],
+                    CellView.myTodoIconsBlack[i],
+                    eventsQuery.documents.length,
+                    CellView.myTodoTileColor[i]),
+              );
         eventsQuery.documents.map(
           (DocumentSnapshot values) {
             groupListItems.add(MessageItem(
@@ -151,7 +162,6 @@ class _DashBoardState extends State<DashBoard> {
       }
       tasksCountArry.add(eventsQuery.documents.length);
     }
-    return eventsQuery.documents.length;
   }
 
   Future<CollectionReference> getCollection() async {

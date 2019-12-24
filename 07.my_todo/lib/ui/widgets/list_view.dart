@@ -19,93 +19,90 @@ class _ListViewWidgetState extends State<ListViewWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
-          addAutomaticKeepAlives: true,
-          primary: false,
-          shrinkWrap: true,
-          itemCount: widget.listItems.length,
-          itemBuilder: (context, index) {
-            final item = widget.listItems[index];
-            if (item is HeadingItem) {
-              selectedColor = item.itemColor;
-              return ListTile(
-                leading: SizedBox(
-                  child: item.icon,
-                  height: 25,
-                  width: 25,
-                ),
-                title: TextWidget(
-                  text: item.heading,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  textColor: item.itemColor,
-                ),
-              );
-            } else if (item is MessageItem) {
-              return Slidable(
-                actionPane: SlidableDrawerActionPane(),
-                actionExtentRatio: 0.25,
-                child: Card(
-                  elevation: 2,
-                  child: ClipPath(
-                    child: Container(
-                      padding: EdgeInsets.all(15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Expanded(
-                            child: TextWidget(
-                              textColor: Colors.black,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 16,
-                              text: item.body,
-                            ),
-                          ),
-                        ],
-                      ),
-                      decoration: BoxDecoration(
-                          border: Border(
-                              left: BorderSide(
-                                  color: priorityBadge(item.priority),
-                                  width: 4))),
+      body: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 1.0),
+        addAutomaticKeepAlives: true,
+        primary: false,
+        shrinkWrap: true,
+        itemCount: widget.listItems.length,
+        itemBuilder: (context, index) {
+          final item = widget.listItems[index];
+          if (item is HeadingItem) {
+            selectedColor = item.itemColor;
+            return ListTile(
+              leading: SizedBox(
+                child: item.icon,
+                height: 25,
+                width: 25,
+              ),
+              title: TextWidget(
+                text: item.heading,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                textColor: item.itemColor,
+              ),
+            );
+          } else if (item is MessageItem) {
+            return Slidable(
+              closeOnScroll: true,
+              actionPane: SlidableStrechActionPane(),
+              actionExtentRatio: 0.25,
+              child: Card(
+                elevation: 2,
+                child: ClipPath(
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(item.body),
+                        ),
+                      ],
                     ),
-                    clipper: ShapeBorderClipper(
-                        shape: RoundedRectangleBorder(
-                            side:
-                                BorderSide(color: Colors.grey[400], width: 0.8),
-                            borderRadius: BorderRadius.circular(3))),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                            color: priorityBadge(item.priority), width: 4),
+                      ),
+                    ),
+                  ),
+                  clipper: ShapeBorderClipper(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.grey[400], width: 0.8),
+                      borderRadius: BorderRadius.circular(3),
+                    ),
                   ),
                 ),
-                secondaryActions: <Widget>[
-                  IconSlideAction(
-                    caption: 'Delete',
-                    color: selectedColor,
-                    icon: Icons.delete_forever,
-                    onTap: () {
-                      if (item is HeadingItem) {
-                        print(item.sender.length);
-                      }
-                      if (item is MessageItem) {
-                        print(widget.listItems);
-                        widget.listItems.removeAt(index);
-                        print(item.documentId);
-                        print(widget.listItems);
-                      }
-                      // setState(() {
-                      //   _deleteProductID(context, item.documentId);
-                      // });
-                      showInSnackBar(context, "Item deleted successfully.");
-                    },
-                  ),
-                ],
-              );
-            }
-            return Text('');
-          },
-        ),
+              ),
+              secondaryActions: <Widget>[
+                IconSlideAction(
+                  closeOnTap: true,
+                  caption: 'Delete',
+                  color: selectedColor,
+                  icon: Icons.delete_forever,
+                  onTap: () {
+                    if (item is HeadingItem) {
+                      print(item.sender.length);
+                    }
+                    if (item is MessageItem) {
+                      print(widget.listItems);
+                      widget.listItems.removeAt(index);
+                      print(item.documentId);
+                      print(widget.listItems);
+                    }
+                    // setState(() {
+                    //   _deleteProductID(context, item.documentId);
+                    // });
+                    showInSnackBar(context, "Item deleted successfully.");
+                  },
+                ),
+              ],
+            );
+          }
+          return Text('');
+        },
       ),
     );
   }

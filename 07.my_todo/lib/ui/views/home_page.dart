@@ -5,7 +5,6 @@ import 'package:my_todo/ui/views/dash_board.dart';
 import 'package:my_todo/ui/views/settings.dart';
 import 'package:my_todo/ui/widgets/bottom_navigation.dart';
 import 'package:my_todo/ui/widgets/keyboard_hide.dart';
-import 'package:my_todo/ui/widgets/text.dart';
 import 'package:provider/provider.dart';
 
 class MyHome extends StatefulWidget {
@@ -51,31 +50,25 @@ class _MyHomeState extends State<MyHome> {
       child: KeyboardHider(
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.white,
-            actions: <Widget>[
-              _page.getIsListClicked
-                  ? IconButton(
-                      color: Colors.black,
-                      icon: Icon(Icons.grid_on),
-                      onPressed: () {
-                        _page.setIsListClicked = false;
-                      },
-                    )
-                  : IconButton(
-                      color: Colors.black,
-                      icon: Icon(Icons.list),
-                      onPressed: () {
-                        _page.setIsListClicked = true;
-                      },
-                    ),
-            ],
+            actions: !_page.getIsSettingsActivate
+                ? <Widget>[
+                    _page.getIsListClicked
+                        ? IconButton(
+                            icon: Icon(Icons.grid_on),
+                            onPressed: () {
+                              _page.setIsListClicked = false;
+                            },
+                          )
+                        : IconButton(
+                            icon: Icon(Icons.list),
+                            onPressed: () {
+                              _page.setIsListClicked = true;
+                            },
+                          )
+                  ]
+                : [],
             elevation: 0,
-            title: TextWidget(
-              text: 'My Task',
-              textColor: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            title: Text('My Task'),
             centerTitle: true,
           ),
           bottomNavigationBar: BottomNavigator(),
