@@ -115,7 +115,7 @@ class _AddNewState extends State<AddNew> {
                 priority: selectedTodoriority.priority,
                 description: myController.text);
             productProvider.addProduct(data);
-            showInSnackBar("Added data successfully!!!");
+            showInSnackBar("Item added successfully.");
           },
           backgroundColor: Colors.blue,
           child: Icon(Icons.add),

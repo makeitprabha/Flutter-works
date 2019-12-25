@@ -83,18 +83,18 @@ class _ListViewWidgetState extends State<ListViewWidget> {
                   color: selectedColor,
                   icon: Icons.delete_forever,
                   onTap: () {
-                    if (item is HeadingItem) {
-                      print(item.sender.length);
-                    }
+                    // if (item is HeadingItem) {
+                    //   print(item.sender.length);
+                    // }
                     if (item is MessageItem) {
                       print(widget.listItems);
                       widget.listItems.removeAt(index);
                       print(item.documentId);
                       print(widget.listItems);
                     }
-                    // setState(() {
-                    //   _deleteProductID(context, item.documentId);
-                    // });
+                    setState(() {
+                      _deleteProductID(context, item.documentId);
+                    });
                     showInSnackBar(context, "Item deleted successfully.");
                   },
                 ),
