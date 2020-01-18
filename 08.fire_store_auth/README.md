@@ -1,16 +1,16 @@
 # fire_store_auth
 
-A new Flutter project.
+Firebase Authentication techniques
+  
+  1. Gmail
+  2. Username password
+  
+![screenshot-1579335579689](https://user-images.githubusercontent.com/22278382/72660926-82f62c80-39fa-11ea-9d97-705710a6db78.jpg)
+![screenshot-1579335694032](https://user-images.githubusercontent.com/22278382/72660927-82f62c80-39fa-11ea-9372-57fd322eba72.jpg)
+![screenshot-1579335677153](https://user-images.githubusercontent.com/22278382/72660928-838ec300-39fa-11ea-8d2d-81fe39198da7.jpg)
+![screenshot-1579335677185](https://user-images.githubusercontent.com/22278382/72660929-838ec300-39fa-11ea-9b80-e4d17f14da89.jpg)
+![screenshot-1579335665057](https://user-images.githubusercontent.com/22278382/72660930-84275980-39fa-11ea-9454-4600d343a2cf.jpg)
+![screenshot-1579335638225](https://user-images.githubusercontent.com/22278382/72660931-84275980-39fa-11ea-89a1-978a01ce27cf.jpg)
 
-## Getting Started
+  
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
