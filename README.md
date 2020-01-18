@@ -15,8 +15,7 @@
 
 07.my_todo - Application to maintain daily ToDo tasks using firebse fire store (get_it, shared_preferences, provider, cloud_firestore, flutter_slidable, google_fonts - Lib)
 
-08.fire_store_auth - Fire store authentication techniques (firebase_auth, google_sign_in, cloud_firestore - Lib)
-    
+08.fire_store_auth - Fire store authentication techniques (firebase_auth, google_sign_in, cloud_firestore - Lib)    
       1. Username, password
       2. Social media
       
