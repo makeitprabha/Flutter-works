@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:taskapp/constants/colors.dart'; 
+import 'package:get/get.dart';
+import 'package:taskapp/constants/colors.dart';
 import 'package:taskapp/controllers/bottom_navigation_controller.dart';
+import 'package:taskapp/controllers/orders_controller.dart';
 
 class BottomNavigationView extends StatelessWidget {
   const BottomNavigationView({Key? key}) : super(key: key);
@@ -36,6 +38,7 @@ class BottomNavigationView extends StatelessWidget {
       selectedItemColor: colorBlue,
       unselectedItemColor: Colors.grey,
       onTap: (index) {
+        Get.delete<OrdersController>(force: true);
         BottomNavigationController.to.setBottomNavigationIndex(index);
       },
       elevation: 5,

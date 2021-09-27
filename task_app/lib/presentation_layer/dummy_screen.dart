@@ -7,6 +7,7 @@ class DummyPages extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("Sample Pages"),
       ),
       body: const Center(
