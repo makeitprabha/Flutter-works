@@ -4,58 +4,51 @@ import 'package:task/model/tweet.dart';
 class TweetService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
-  Stream<QuerySnapshot> fetchTweetsSpecificUser(String userId) {
+  Stream<QuerySnapshot> fetchSpecificUserTweets(String userId) {
     return _firebaseFirestore
         .collection("users")
-        .doc(userId.toString())
-        .collection('userTweets')
+        .doc(userId)
+        .collection("userTweets")
+        // .orderBy('createdOn', descending: false)
         .snapshots();
   }
 
-  Stream<QuerySnapshot> fetchTweets() {
+  Stream<QuerySnapshot> fetchAllUsersTweets() {
     return _firebaseFirestore.collection("users").snapshots();
   }
 
-  Future<Tweet> createNewTweet(Tweet tweet) async {
-    DocumentReference docRef = _firebaseFirestore
-        .collection("users")
-        .doc(tweet.id.toString())
+  createNewTweet(Tweet tweet) async {
+    await _firebaseFirestore
+        .collection('users')
+        .doc(tweet.authorId)
         .collection('userTweets')
-        .doc();
-    await docRef.set({
-      "id": tweet.id,
+        .add({
+      'authorId': tweet.authorId,
       'text': tweet.text,
-      "timestamp": tweet.timestamp,
+      'createdOn': Timestamp.now(),
       "name": tweet.name,
-      "email": tweet.email,
+      "email": tweet.emailId,
     });
-    return tweet;
   }
 
-  Future<Tweet> updateTweet(Tweet tweet) async {
-    DocumentReference docRef = _firebaseFirestore
+  updateTweet(Tweet tweet) async {
+    return _firebaseFirestore
         .collection("users")
-        .doc(tweet.id.toString())
+        .doc(tweet.authorId)
         .collection('userTweets')
-        .doc(tweet.authorId);
-
-    await docRef.update({
+        .doc(tweet.documentId)
+        .update({
       'text': tweet.text,
-      "id": tweet.id,
-      "timestamp": tweet.timestamp,
-      "name": tweet.name,
-      "email": tweet.email,
+      "createdOn": Timestamp.now(),
     });
-    return tweet;
   }
 
-  Future<Tweet> deleteContact(Tweet tweet) async {
+  deleteContact(Tweet tweet) async {
     await _firebaseFirestore
         .collection("users")
-        .doc(tweet.id.toString())
-        .collection('userTweets')
         .doc(tweet.authorId)
+        .collection('userTweets')
+        .doc(tweet.documentId)
         .delete();
-    return tweet;
   }
 }

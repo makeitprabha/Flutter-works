@@ -6,7 +6,7 @@ class UserService {
 
   Future<UserModel> createNewUser(UserModel user) async {
     await _firebaseFirestore.collection("users").doc(user.id).set({
-      "id": user.id,
+      "authorId": user.id,
       "email": user.email,
       "name": user.email.toString().split("@")[0].toString(),
     });

@@ -1,30 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Tweet {
-  String? authorId;
-  String? text;
-  Timestamp? timestamp;
-  String? name;
-  String? email;
-  String? id;
+  late String documentId;
+  late String text;
+  late String name = '';
+  late String emailId = '';
+  late String authorId = '';
+  late Timestamp createdOn;
 
   Tweet({
-    this.authorId,
-    this.text,
-    this.timestamp,
-    this.name,
-    this.email,
-    this.id,
+    required this.text,
+    required this.documentId,
+    required this.emailId,
+    required this.authorId,
+    required this.name,
   });
 
-  factory Tweet.fromDoc(DocumentSnapshot doc) {
-    return Tweet(
-      id: doc.id,
-      authorId: doc['authorId'],
-      text: doc['text'],
-      timestamp: doc['timestamp'],
-      name: doc['name'],
-      email: doc['email'],
-    );
+  Tweet.fromDoc({
+    required DocumentSnapshot doc,
+    required String email,
+    required String userName,
+    required String id,
+  }) {
+    documentId = doc.id;
+    text = doc['text'];
+    emailId = email;
+    name = userName;
+    authorId = id;
+    createdOn = doc['createdOn'];
   }
 }

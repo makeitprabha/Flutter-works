@@ -7,13 +7,12 @@ import 'package:task/viewmodel/controller/tweet_controller.dart';
 
 class CreateTweetScreen extends StatefulWidget {
   final String status;
-  final String id;
-  final String text;
-  const CreateTweetScreen({
+  final Tweet tweet;
+
+  CreateTweetScreen({
     Key? key,
     required this.status,
-    required this.id,
-    required this.text,
+    required this.tweet,
   }) : super(key: key);
 
   @override
@@ -21,7 +20,6 @@ class CreateTweetScreen extends StatefulWidget {
 }
 
 class _CreateTweetScreenState extends State<CreateTweetScreen> {
-  final _controller = Get.put(TweetController());
   final TextEditingController _tweetController = TextEditingController();
 
   @override
@@ -33,7 +31,7 @@ class _CreateTweetScreenState extends State<CreateTweetScreen> {
   @override
   void initState() {
     super.initState();
-    _tweetController.text = widget.text;
+    _tweetController.text = widget.tweet.text;
   }
 
   @override
@@ -52,13 +50,13 @@ class _CreateTweetScreenState extends State<CreateTweetScreen> {
       ),
       body: Obx(() {
         return AbsorbPointer(
-          absorbing: _controller.showProgress.value,
+          absorbing: TweetController.to.isLoading.value,
           child: Stack(
             children: [
               _buildUI(context),
               Center(
                 child: Visibility(
-                  visible: _controller.showProgress.value,
+                  visible: TweetController.to.isLoading.value,
                   child: const Center(
                     child: CircularProgressIndicator(),
                   ),
@@ -72,7 +70,6 @@ class _CreateTweetScreenState extends State<CreateTweetScreen> {
   }
 
   Widget _buildUI(BuildContext context) {
-    _controller.setShowProgress(false);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -95,24 +92,29 @@ class _CreateTweetScreenState extends State<CreateTweetScreen> {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () async {
-              _controller.setShowProgress(true);
-              if (_tweetController.value.text.isNotEmpty) {
-                Tweet tweet = Tweet(
-                  authorId: widget.id.isEmpty ? '' : widget.id,
-                  text: _tweetController.value.text,
-                  id: FirebaseAuthController.to.user!.uid,
-                  timestamp: Timestamp.fromDate(
-                    DateTime.now(),
-                  ),
-                  name: FirebaseAuthController.to.user!.displayName,
-                  email: FirebaseAuthController.to.user!.email,
-                );
-                if (widget.status == 'new') {
-                  _controller.createTweet(tweet);
-                } else {
-                  _controller.updateTweet(tweet);
+              TweetController.to.isLoading(true);
+              FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(FirebaseAuthController.to.user!.uid.toString())
+                  .get()
+                  .then((value) {
+                TweetController.to.tweetListFromService.clear();
+                if (_tweetController.value.text.isNotEmpty) {
+                  Tweet tweet = Tweet(
+                    documentId: widget.tweet.documentId,
+                    text: _tweetController.value.text,
+                    name: value['name'],
+                    emailId: value['email'],
+                    authorId: value['authorId'],
+                  );
+                  if (widget.status == 'new') {
+                    TweetController.to.createTweet(tweet);
+                  } else {
+                    TweetController.to.updateTweet(tweet);
+                  }
+                  TweetController.to.onInit();
                 }
-              }
+              });
             },
             child: const Text("Tweet"),
           ),

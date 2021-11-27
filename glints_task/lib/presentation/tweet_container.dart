@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task/model/tweet.dart';
-import 'package:task/model/user.dart';
-import 'package:task/viewmodel/controller/app_controller.dart';
+import 'package:task/presentation/create_tweet_screen.dart';
 import 'package:task/viewmodel/controller/firebase_auth_controller.dart';
 import 'package:task/viewmodel/controller/tweet_controller.dart';
 
-import 'create_tweet_screen.dart';
-
 class TweetContainer extends StatelessWidget {
   final Tweet tweet;
-  final UserModel author;
-  final String currentUserId;
 
   const TweetContainer({
     Key? key,
     required this.tweet,
-    required this.author,
-    required this.currentUserId,
   }) : super(key: key);
 
   @override
@@ -31,7 +24,7 @@ class TweetContainer extends StatelessWidget {
             children: [
               RichText(
                 text: TextSpan(
-                  text: author.name.toString(),
+                  text: tweet.name.toString(),
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -39,7 +32,7 @@ class TweetContainer extends StatelessWidget {
                   ),
                   children: [
                     TextSpan(
-                      text: '     ${author.email.toString()}',
+                      text: '     ${tweet.emailId.toString()}',
                       style: const TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.normal,
@@ -70,14 +63,24 @@ class TweetContainer extends StatelessWidget {
                       color: Colors.black,
                     ),
                     onPressed: () {
-                      Get.to(
-                        CreateTweetScreen(
-                          status: 'update',
-                          id: tweet.authorId.toString(),
-                          text: tweet.text.toString(),
-                        ),
-                        transition: Transition.rightToLeft,
-                      );
+                      if (FirebaseAuthController.to.user!.uid.toString() ==
+                          tweet.authorId) {
+                        Get.to(
+                          CreateTweetScreen(
+                            status: 'update',
+                            tweet: tweet,
+                          ),
+                          transition: Transition.rightToLeft,
+                        );
+                      } else {
+                        Get.snackbar(
+                          'Failed',
+                          "You are not eligible to edit this tweet!!",
+                          backgroundColor: Colors.black,
+                          snackPosition: SnackPosition.BOTTOM,
+                          colorText: Colors.white,
+                        );
+                      }
                     },
                   ),
                   IconButton(
@@ -86,7 +89,19 @@ class TweetContainer extends StatelessWidget {
                       color: Colors.black,
                     ),
                     onPressed: () {
-                      TweetController.to.deleteTweet(tweet);
+                      if (FirebaseAuthController.to.user!.uid.toString() ==
+                          tweet.authorId) {
+                        TweetController.to.deleteTweet(tweet);
+                        TweetController.to.onInit();
+                      } else {
+                        Get.snackbar(
+                          "Failed!!",
+                          "You are not eligible to delete this tweet!!",
+                          backgroundColor: Colors.black,
+                          snackPosition: SnackPosition.BOTTOM,
+                          colorText: Colors.white,
+                        );
+                      }
                     },
                   ),
                   IconButton(
@@ -95,14 +110,25 @@ class TweetContainer extends StatelessWidget {
                       color: Colors.black,
                     ),
                     onPressed: () {
-                      AppController.to.setShowProgress(true);
+                      // if (FirebaseAuthController.to.user!.uid.toString() ==
+                      //     tweet.authorId) {
+                      Get.delete<TweetController>();
                       FirebaseAuthController.to.userSignOut();
+                      // } else {
+                      //   Get.snackbar(
+                      //     'Failed',
+                      //     "You are not eligible to click this tweet!!",
+                      //     backgroundColor: Colors.black,
+                      //     snackPosition: SnackPosition.BOTTOM,
+                      //     colorText: Colors.white,
+                      //   );
+                      // }
                     },
                   ),
                 ],
               ),
               Text(
-                tweet.timestamp!.toDate().toString().substring(0, 19),
+                tweet.createdOn.toDate().toString().substring(0, 19),
                 style: const TextStyle(color: Colors.grey),
               )
             ],

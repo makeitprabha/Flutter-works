@@ -6,7 +6,6 @@ import 'package:task/presentation/landing_page.dart';
 import 'package:task/presentation/sign_in.dart';
 import 'package:task/services/firebase_auth_service.dart';
 import 'package:task/services/user_service.dart';
-import 'package:task/viewmodel/controller/app_controller.dart';
 
 class FirebaseAuthController extends GetxController {
   static FirebaseAuthController get to => Get.find();
@@ -14,6 +13,7 @@ class FirebaseAuthController extends GetxController {
   final UserService _userService = UserService();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Rxn<User> _firebaseUser = Rxn<User>();
+  final isLoading = false.obs;
 
   User? get user => _firebaseUser.value;
 
@@ -27,7 +27,7 @@ class FirebaseAuthController extends GetxController {
   }
 
   _initScreen(User? user) {
-    if (user == null) {
+    if (_auth.currentUser == null) {
       Get.offAll(
         const SignInPage(),
         transition: Transition.rightToLeft,
@@ -49,9 +49,9 @@ class FirebaseAuthController extends GetxController {
       );
       await _userService.createNewUser(user);
       setUser(_auth.currentUser);
-      AppController.to.setShowProgress(false);
+      isLoading(false);
     } catch (e) {
-      AppController.to.setShowProgress(false);
+      isLoading(false);
       Get.snackbar(
         "Error creating Account",
         e.toString(),
@@ -71,12 +71,8 @@ class FirebaseAuthController extends GetxController {
       if (_userCredential.user != null) {
         _createUser(_userCredential);
       }
-      Get.offAll(
-        const SignInPage(),
-        transition: Transition.rightToLeft,
-      );
     } catch (e) {
-      AppController.to.setShowProgress(false);
+      isLoading(false);
       Get.snackbar(
         "Error signing in",
         e.toString(),
@@ -96,12 +92,8 @@ class FirebaseAuthController extends GetxController {
       if (_userCredential.user != null) {
         _createUser(_userCredential);
       }
-      Get.offAll(
-        const LandingPage(),
-        transition: Transition.rightToLeft,
-      );
     } catch (e) {
-      AppController.to.setShowProgress(false);
+      isLoading(false);
       Get.snackbar(
         "Error signing in",
         e.toString(),
@@ -115,13 +107,9 @@ class FirebaseAuthController extends GetxController {
   Future<void> userSignOut() async {
     try {
       await _authService.userSignOut();
-      AppController.to.setShowProgress(false);
-      Get.offAll(
-        const SignInPage(),
-        transition: Transition.rightToLeft,
-      );
+      isLoading(false);
     } catch (e) {
-      AppController.to.setShowProgress(false);
+      isLoading(false);
       Get.snackbar(
         "Sign Out Error",
         e.toString(),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task/presentation/sign_up.dart';
-import 'package:task/viewmodel/controller/app_controller.dart';
 import 'package:task/viewmodel/controller/firebase_auth_controller.dart';
 
 class SignInPage extends StatefulWidget {
@@ -29,24 +28,7 @@ class _SignInPageState extends State<SignInPage> {
       appBar: AppBar(
         title: const Text("Login Page"),
       ),
-      body: Obx(() {
-        return AbsorbPointer(
-          absorbing: AppController.to.showProgress.value,
-          child: Stack(
-            children: [
-              _buildUI(context),
-              Center(
-                child: Visibility(
-                  visible: AppController.to.showProgress.value,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
+      body: _buildUI(context),
     );
   }
 
@@ -89,7 +71,6 @@ class _SignInPageState extends State<SignInPage> {
               child: ElevatedButton(
                 onPressed: () async {
                   FocusScope.of(context).unfocus();
-                  AppController.to.setShowProgress(true);
                   await FirebaseAuthController.to.login(
                     _emailController.text,
                     _passwordController.text,
