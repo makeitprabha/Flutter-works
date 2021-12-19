@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "715227712782",
+    "project_id": "boaapp-cf21f",
+    "storage_bucket": "boaapp-cf21f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715227712782:android:8e35c9f79cbbe16d111b5f",
+        "android_client_info": {
+          "package_name": "com.example.boa_task_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "715227712782-qg8ah215fd4f661u96arhv1tr3hdn7gh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhfDaM6pfHqoi2S49_Pogmp8lOCoHzpms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "715227712782-qg8ah215fd4f661u96arhv1tr3hdn7gh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
